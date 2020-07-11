@@ -48,17 +48,46 @@ exports.list = (req, res, next) => {
 
 
 
-exports.find = (req, res, next) => {
+exports.findUser = (req, res, next) => {
   console.log(trades);
   let userID = parseInt(req.params['userID']);
-  let result = trades.find((item)=>{
+  let result = trades.filter((item)=>{
     return item.user.id === userID;
   })
-  if(result===undefined){
-    res.sendStatus(400);
+  if(result.length===0){
+    res.sendStatus(404);
   }
   else{
 
+    res.send(result);
+  }
+};
+
+exports.findStock = (req, res, next) => {
+  let stockSymbol = req.params['stockSymbol'];
+  let result = trades.filter((item)=>{
+    return item.symbol === stockSymbol;
+  })
+  if(result.length===0){
+    res.sendStatus(404);
+  }
+  else{
+    res.send(result);
+  }
+};
+
+
+exports.findUserStock = (req, res, next) => {
+  let userID = parseInt(req.params['userID']); 
+  let stockSymbol = req.params['stockSymbol'];
+
+  let result = trades.filter((item)=>{
+    return (item.user.id === userID) && (item.symbol === stockSymbol);
+  })
+  if(result.length===0){
+    res.sendStatus(404);
+  }
+  else{
     res.send(result);
   }
 };
